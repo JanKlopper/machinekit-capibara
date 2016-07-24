@@ -137,12 +137,48 @@ net estop-ext => iocontrol.0.emc-enable-in
 net estop-out <= iocontrol.0.user-enable-out
 
 loadusr -Wn huanyangvfd huanyangvfd.py
-net spindle-cw => huanyangvfd.spindle_rev
-net spindle-on <= motion.spindle-on => huanyangvfd.spindle_on
-net spindle-cmd => huanyangvfd.freq_cmd
+net hy-fwd <= motion.spindle-forward => huanyangvfd.spindle_fwd
+net hy-rev <= motion.spindle-reverse => huanyangvfd.spindle_rev
+net hy-on <= motion.spindle-on => huanyangvfd.spindle_on
+net hy-speed <= motion.spindle-speed-out => huanyangvfd.speed
 
 loadusr -W hal_manualtoolchange
 net tool-change iocontrol.0.tool-change => hal_manualtoolchange.change
 net tool-changed iocontrol.0.tool-changed <= hal_manualtoolchange.changed
 net tool-number iocontrol.0.tool-prep-number => hal_manualtoolchange.number
 net tool-prepare-loopback iocontrol.0.tool-prepare => iocontrol.0.tool-prepared
+
+#enable the spindle once the GUI is setup
+loadusr -Wn huanyangvfdpanel pyvcp -c huanyangvfdpanel panel.xml
+
+#custom python interface gui
+net hy-RPM <= huanyangvfd.Rott => huanyangvfdpanel.spindle-speed
+net hy-AMPS <= huanyangvfd.OutA => huanyangvfdpanel.amp-meter
+net hy-Base-Freq <= huanyangvfd.base-freq => huanyangvfdpanel.base-freq
+net hy-Max-Freq <= huanyangvfd.max-freq => huanyangvfdpanel.max-freq
+net hy-Freq-Lower <= huanyangvfd.freq-lower-limit => huanyangvfdpanel.freq-lower-limit
+net hy-Motor-Voltage <= huanyangvfd.rated-motor-voltage => huanyangvfdpanel.rated-motor-voltage
+#net hy-Motor-Current <= huanyangvfd.rated-motor-current => huanyangvfdpanel.rated-motor-current
+#net hy-Motor-Poles <= huanyangvfd.motor-pole-number => huanyangvfdpanel.motor-pole-number
+net hy-Motor-Rev <= huanyangvfd.rated-motor-rev => huanyangvfdpanel.rated-motor-rev
+net hy-Modbus-OK <= huanyangvfd.modbus-ok => huanyangvfdpanel.modbus-ok
+#net hy-Freq-Cmd <= huanyangvfd.freq_cmd => huanyangvfdpanel.frequency-command
+
+#net hy-CNST-Run <=huanyangvfd.CNST-run => huanyangvfdpanel.CNST-run
+#net hy-CNST-Jog <= huanyangvfd.CNST-jog => huanyangvfdpanel.CNST-jog
+#net hy-CNST-Command-rf <= spindle-vfd.CNST-command-rf => huanyangvfdpanel.CNST-command-rf
+#net hy-CNST-Runnning <= spindle-vfd.CNST-running => huanyangvfdpanel.CNST-running
+#net hy-CNST-Jogging <= spindle-vfd.CNST-jogging => huanyangvfdpanel.CNST-jogging
+#net hy-CNST-Running-rf <= spindle-vfd.CNST-running-rf => huanyangvfdpanel.CNST-running-rf
+#net hy-CNST-Bracking <= spindle-vfd.CNST-bracking => huanyangvfdpanel.CNST-bracking
+#net hy-CNST-Track-Start <= spindle-vfd.CNST-track-start => huanyangvfdpanel.CNST-track-start
+
+# now enable the VFD after EMC is up and running
+#setp huanyangvfd.enable 1
+
+# DRO connections
+net DRO-Xpos <= axis.0.joint-pos-cmd => huanyangvfdpanel.Xdisplay
+net DRO-Ypos <= axis.1.joint-pos-cmd => huanyangvfdpanel.Ydisplay
+net DRO-Zpos <= axis.2.joint-pos-cmd => huanyangvfdpanel.Zdisplay
+
+

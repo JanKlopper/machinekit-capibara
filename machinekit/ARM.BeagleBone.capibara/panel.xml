@@ -236,7 +236,7 @@
 	    		<tablesticky sticky="nsew"/>	
 	    	    	<bar>
 	    			<halpin>"spindle-speed"</halpin>
-	    			<max_>1440</max_>
+	    			<max_>24000</max_>
 	    		</bar>
  		<tablerow/>
  			<label>
@@ -248,12 +248,12 @@
 			    	<halpin>"amp-meter"</halpin>
 			    	<size>200</size>
 			    	<min_>0</min_>
-			    	<max_>8</max_>
+			    	<max_>25</max_>
 			    	<majorscale>1</majorscale>
 			    	<minorscale>0.2</minorscale>
-			    	<region1>(7,8,"red")</region1>
-			    	<region2>(5,7,"yellow")</region2>
-			    	<region3>(0,5,"green")</region3>
+			    	<region1>(20,25,"red")</region1>
+			    	<region2>(15,20,"yellow")</region2>
+			    	<region3>(0,15,"green")</region3>
 			</meter>
  	</table>
  	<table>

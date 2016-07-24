@@ -56,5 +56,3 @@ net joy-z-jog halui.jog.2.analog <= sum2.1.out
 #net button-abort <= input.button.4
 #net button-abort => halui.abort
 
-#anable the spindle once the GUI is setup
-setp huanyangvfd.spindle_on 1
